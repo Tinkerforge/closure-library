@@ -74,10 +74,10 @@ function tearDown() {
   expectedFailures.handleTearDown();
   var testVisibleDiv2 = goog.dom.getElement('test-visible2');
   testVisibleDiv2.setAttribute('style', '');
-  testVisibleDiv2.innerHTML = '';
+  goog.dom.removeChildren(testVisibleDiv2);
   var testViewport = goog.dom.getElement('test-viewport');
   testViewport.setAttribute('style', '');
-  testViewport.innerHTML = '';
+  goog.dom.removeChildren(testViewport);
   goog.dispose(mockUserAgent);
 
   // Prevent multiple vendor prefixed mock elements from poisoning the cache.
@@ -786,8 +786,8 @@ function testGetSizeSvgElements() {
   svgEl.appendChild(el);
 
   // The bounding size in 1 larger than the SVG element in IE.
-  var expectedWidth = (goog.userAgent.IE) ? 33 : 32;
-  var expectedHeight = (goog.userAgent.IE) ? 22 : 21;
+  var expectedWidth = (goog.userAgent.EDGE_OR_IE) ? 33 : 32;
+  var expectedHeight = (goog.userAgent.EDGE_OR_IE) ? 22 : 21;
 
   var dims = goog.style.getSize(el);
   assertEquals(expectedWidth, dims.width);
@@ -825,7 +825,7 @@ function testGetSizeSvgDocument() {
   var doc = goog.dom.getFrameContentDocument(frame);
   var rect = doc.getElementById('rect');
   var dims = goog.style.getSize(rect);
-  if (!goog.userAgent.IE) {
+  if (!goog.userAgent.EDGE_OR_IE) {
     assertEquals(50, dims.width);
     assertEquals(50, dims.height);
   } else {
@@ -960,7 +960,7 @@ function testIsUnselectable() {
                goog.style.isUnselectable($('unselectable-gecko')));
   assertEquals(goog.userAgent.IE || goog.userAgent.OPERA,
                goog.style.isUnselectable($('unselectable-ie')));
-  assertEquals(goog.userAgent.WEBKIT,
+  assertEquals(goog.userAgent.WEBKIT || goog.userAgent.EDGE,
                goog.style.isUnselectable($('unselectable-webkit')));
 }
 
